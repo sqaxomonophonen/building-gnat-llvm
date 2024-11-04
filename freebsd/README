@@ -1,0 +1,26 @@
+Succesfully tried on: FreeBSD 14.1-RELEASE
+
+See parent README for a broader discussion; this relates to FreeBSD only.
+
+Git commit hashes:
+
+  https://github.com/AdaCore/gnat-llvm.git commit fbd6a428d80d23f9bb1a764e535b27fa20ddd049
+  git://gcc.gnu.org/git/gcc.git commit caa26905eaf79d4875136c8de9e881371e97fe90
+
+The patches below `llvm16-patches/` are the same as in `llvm/patches/` in
+`gnat-llvm.git`, except they've been "normalized" (the originals had an
+inconsistent root dir) and renamed to fit the conventions of the FreeBSD Ports
+collection ("patch-" prefix added). They must be copied to
+`/usr/ports/devel/llvm16/files/` before building llvm16 in
+`/usr/ports/devel/llvm16`
+
+Install gnat12 and add it to your PATH before compiling gnat-llvm:
+$ pkg install gnat12
+$ export PATH=$PATH:/usr/local/gnat12/bin
+
+`gnat-llvm.patch` must also be applied before compiling gnat-llvm. The changes
+are discussed in the parent README.
+
+Also see the build instructions in gnat-llvm.git:README, but:
+ - Use the llvm16 build instructions here
+ - Use `gmake` instead of `make` to build

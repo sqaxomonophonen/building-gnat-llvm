@@ -1,0 +1,16 @@
+Run:
+$ docker build -t gnat-llvm .
+and wait a couple of hours
+
+The `NVPTXTargetMachinepatch.diff` patch is skipped because it causes a late
+llvm16 build error (2+ hours into the build process). The "offending data
+layout" string seems to match the change in the patch:
+
+```
+8837.1 [705/2583] /src/llvm-toolchain-16-16.0.6/build-llvm/tools/clang/stage2-bins/bin/clang -DCLC_NVPTX -D__CLC_INTERNAL -I/src/llvm-toolchain-16-16.0.6/llvm/include -I/src/llvm-toolchain-16-16.0.6/build-llvm/tools/clang/stage2-bins/include -I/src/llvm-toolchain-16-16.0.6/libclc/generic/include -cl-no-stdinc -target nvptx-- -fno-builtin -nostdlib -I /src/llvm-toolchain-16-16.0.6/libclc/generic/lib/async -o CMakeFiles/builtins.link.nvptx--.dir/generic/lib/async/async_work_group_strided_copy.bc -c /src/llvm-toolchain-16-16.0.6/libclc/generic/lib/async/async_work_group_strided_copy.cl -emit-llvm
+8837.1 FAILED: CMakeFiles/builtins.link.nvptx--.dir/generic/lib/async/async_work_group_strided_copy.bc
+8837.1 /src/llvm-toolchain-16-16.0.6/build-llvm/tools/clang/stage2-bins/bin/clang -DCLC_NVPTX -D__CLC_INTERNAL -I/src/llvm-toolchain-16-16.0.6/llvm/include -I/src/llvm-toolchain-16-16.0.6/build-llvm/tools/clang/stage2-bins/include -I/src/llvm-toolchain-16-16.0.6/libclc/generic/include -cl-no-stdinc -target nvptx-- -fno-builtin -nostdlib -I /src/llvm-toolchain-16-16.0.6/libclc/generic/lib/async -o CMakeFiles/builtins.link.nvptx--.dir/generic/lib/async/async_work_group_strided_copy.bc -c /src/llvm-toolchain-16-16.0.6/libclc/generic/lib/async/async_work_group_strided_copy.cl -emit-llvm
+8837.1 error: backend data layout 'e-p:32:32-i64:64-i128:128-v16:16-v32:32-n16:32:64-S64' does not match expected target description 'e-p:32:32-i64:64-i128:128-v16:16-v32:32-n16:32:64'
+8837.1 1 error generated.
+```
+(a see a handful of these, not just one)

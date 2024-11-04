@@ -1,0 +1,50 @@
+
+Attempts to make semi-reproducible builds of gnat-llvm for FreeBSD and
+Docker/Linux.
+
+ - My main motivation is the ability to compile Ada code to WASM.
+
+ - gnat-llvm is built using gnat-12
+
+ - gnat-llvm depends on a /patched/ llvm-16; both my solutions patches and
+   builds the official source packages (via the Ports collection on FreeBSD,
+   debuild on Debian/Docker). See the patches in the `gnat-llvm.git` repository
+   (llvm/patches/*)
+
+ - gnat-llvm is built from git clones:
+     https://github.com/AdaCore/gnat-llvm.git
+     git://gcc.gnu.org/git/gcc.git
+   In an attempt to improve reproducibility, both repos are locked to a
+   specific git commit hash. NOTE: these are just whatever recent hashes I
+   could get to work; they don't correspond to a specific release; gnat-llvm
+   currently doesn't seem to have "releases" as such, and directs you to use
+   the latest HEAD of gcc.git
+
+ - Various minor tweaks were necessary to make it work:
+   - `llvm-interface/Makefile` was forced to use the llvm-config from llvm16 (I
+     don't know why it should use an arbitrary llvm-config when the gnat-llvm
+     project deliberately targets llvm16)
+   - I changed a build script to use `#!/usr/bin/env bash` instead of
+     `#!/bin/bash` (the latter doesn't work on FreeBSD, the former typically
+     works on systems that have bash installed)
+   - The `-gnatwU` Ada/GNAT compiler switch was added. Compilation otherwise
+     fails due to warnings about unused code. These cause compilation to fail
+     due to the `-gnatg` switch, which is used when GNAT compiles itself; it's
+     unusually strict and treats all warnings as errors. See docs on both
+     switches here:
+     https://docs.adacore.com/gnat_ugn-docs/html/gnat_ugn/gnat_ugn/building_executable_programs_with_gnat.html
+
+ - Things that may take a long time, ordered from worst to best:
+   - Building llvm16 (hours)
+   - Cloning gcc.git (tens of minutes? depends on how your network and
+     gcc.gnu.org is feeling today?)
+   - Compiling gnat-llvm (minutes)
+
+
+try test.adb:
+-- ./llvm-gcc --target=wasm32 -c -S -emit-llvm test.adb
+-- ./llvm-gcc --target=wasm32 -c test.adb
+function Test(X : Integer) return Integer is
+begin
+   return X * X;
+end Test;
