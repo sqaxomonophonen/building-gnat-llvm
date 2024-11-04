@@ -1,0 +1,5 @@
+#apt-get source llvm-16
+dget http://deb.debian.org/debian/pool/main/l/llvm-toolchain-16/llvm-toolchain-16_16.0.6-15~deb12u1.dsc
+apt-get build-dep llvm-16
+cd llvm-toolchain-16-16.0.6
+debuild -b -uc -us
