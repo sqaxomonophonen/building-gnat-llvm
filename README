@@ -4,6 +4,12 @@ Docker/Linux.
 
  - My main motivation is the ability to compile Ada code to WASM.
 
+ - Current status:
+    - Works on FreeBSD 14.1
+    - Debian-based Docker image is work-in-progres; it seems to build llvm-gcc,
+      but some of the later stages (bootstrapping? llvm-gcc compiling itself?)
+      seem to fail
+
  - gnat-llvm is built using gnat-12
 
  - gnat-llvm depends on a /patched/ llvm-16; both my solutions patches and

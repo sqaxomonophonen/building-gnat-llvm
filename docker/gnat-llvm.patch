@@ -1,0 +1,57 @@
+diff --git a/llvm-interface/Makefile b/llvm-interface/Makefile
+index 99dddfbf..481bf79f 100644
+--- a/llvm-interface/Makefile
++++ b/llvm-interface/Makefile
+@@ -21,16 +21,8 @@ ADALIB=lib/rts-llvm/adalib
+ 
+ pwd:=$(shell pwd)
+ 
+-LLVM_BUILD=$(pwd)/../llvm/llvm-obj
+-
+-ifneq ($(wildcard $(LLVM_BUILD)/bin/llvm-config),)
+-  LLVM_CONFIG=$(LLVM_BUILD)/bin/llvm-config
+-  LLVM_SRC=$(shell cd `$(LLVM_CONFIG) --includedir`/../..;pwd)
+-  CLANG_CXXFLAGS=-I$(LLVM_BUILD)/tools/clang/include -I$(LLVM_SRC)/clang/include
+-else
+-  LLVM_CONFIG=llvm-config
+-  CLANG_CXXFLAGS=
+-endif
++LLVM_CONFIG=llvm-config-16
++CLANG_CXXFLAGS=
+ 
+ LDFLAGS=$(shell $(LLVM_CONFIG) --libs all --ldflags --system-libs)
+ CXXFLAGS=
+diff --git a/llvm-interface/check_for_LLVM_aliasing_bug.sh b/llvm-interface/check_for_LLVM_aliasing_bug.sh
+index dec7398b..6c8a069f 100755
+--- a/llvm-interface/check_for_LLVM_aliasing_bug.sh
++++ b/llvm-interface/check_for_LLVM_aliasing_bug.sh
+@@ -1,4 +1,4 @@
+-#! /bin/bash
++#!/usr/bin/env bash
+ set -eu
+ 
+ cat << EOF > obj/c43204h.ll
+@@ -110,8 +110,8 @@ declare i32 @report__ident_int(i32)
+ !24 = !{!10, !13, i64 4, i64 4}
+ 
+ EOF
+-opt -O2 obj/c43204h.ll -o obj/c43204h_o.bc
+-llvm-dis obj/c43204h_o.bc
++opt-16 -O2 obj/c43204h.ll -o obj/c43204h_o.bc
++llvm-dis-16 obj/c43204h_o.bc
+ if [ "`wc -l obj/c43204h_o.ll | awk '{print $1}'` " -gt "40" ]; then
+     BUG=False
+     echo "OK: using LLVM without the aliasing bug"
+diff --git a/llvm-interface/gnat_llvm.gpr b/llvm-interface/gnat_llvm.gpr
+index 966d4739..29ebe2f5 100644
+--- a/llvm-interface/gnat_llvm.gpr
++++ b/llvm-interface/gnat_llvm.gpr
+@@ -19,7 +19,7 @@ project Gnat_LLVM is
+       for Global_Configuration_Pragmas use "gnat.adc";
+    end Builder;
+ 
+-   Common_Switches := ("-g", "-gnatg");
++   Common_Switches := ("-g", "-gnatg", "-gnatwU");
+ 
+    package Compiler is
+       case Build is
