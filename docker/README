@@ -20,11 +20,6 @@ layout" string seems to match the change in the patch:
 ```
 (a see a handful of these, not just one)
 
-
-TODO: remove `gprbuild` from early apt-get install (the Debian one doesn't work
-properly, and we build our own instead. However, it's troublesome to remove it
-because I have probably 4 hours of cached work after the gprbuild install :-/)
-
 TODO: the final image size is ~20GB; I could probably make a lean image by
 using this work as an intermediate image? However, gnat-llvm doesn't have a
 "make install"..
