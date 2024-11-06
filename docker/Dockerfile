@@ -23,8 +23,13 @@ RUN /setup-build-llvm16.sh
 COPY setup-install-llvm16.sh /
 RUN /setup-install-llvm16.sh
 
+COPY setup-gprbuild.sh /
+RUN /setup-gprbuild.sh
+
 COPY setup-build-gnat-llvm.sh /
 COPY gnat-llvm.patch /
 RUN /setup-build-gnat-llvm.sh
+
+COPY gnat-llvm-dot-env /
 
 CMD [ "bash" ]

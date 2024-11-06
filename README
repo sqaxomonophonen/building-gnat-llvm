@@ -4,11 +4,8 @@ Docker/Linux.
 
  - My main motivation is the ability to compile Ada code to WASM.
 
- - Current status:
-    - Works on FreeBSD 14.1
-    - Debian-based Docker image is work-in-progres; it seems to build llvm-gcc,
-      but some of the later stages (bootstrapping? llvm-gcc compiling itself?)
-      seem to fail
+ - Current status: works on on FreeBSD 14.1; Debian-based Docker image works
+   (~20GB though...)
 
  - gnat-llvm is built using gnat-12
 
@@ -47,10 +44,11 @@ Docker/Linux.
    - Compiling gnat-llvm (minutes)
 
 
-try test.adb:
--- ./llvm-gcc --target=wasm32 -c -S -emit-llvm test.adb
--- ./llvm-gcc --target=wasm32 -c test.adb
+-- try test.adb:
 function Test(X : Integer) return Integer is
 begin
    return X * X;
 end Test;
+-- compile with:
+-- llvm-gcc --target=wasm32 -c -S -emit-llvm test.adb
+-- llvm-gcc --target=wasm32 -c test.adb

@@ -2,6 +2,11 @@ Run:
 $ docker build -t gnat-llvm .
 and wait a couple of hours
 
+To use:
+$ docker run -it --rm gnat-llvm
+$ . /gnat-llvm-dot-env
+$ llvm-gcc --version
+
 The `NVPTXTargetMachinepatch.diff` patch is skipped because it causes a late
 llvm16 build error (2+ hours into the build process). The "offending data
 layout" string seems to match the change in the patch:
@@ -14,3 +19,12 @@ layout" string seems to match the change in the patch:
 8837.1 1 error generated.
 ```
 (a see a handful of these, not just one)
+
+
+TODO: remove `gprbuild` from early apt-get install (the Debian one doesn't work
+properly, and we build our own instead. However, it's troublesome to remove it
+because I have probably 4 hours of cached work after the gprbuild install :-/)
+
+TODO: the final image size is ~20GB; I could probably make a lean image by
+using this work as an intermediate image? However, gnat-llvm doesn't have a
+"make install"..

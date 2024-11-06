@@ -16,3 +16,7 @@ dpkg -i llvm-16-dev_16.0.6-15~deb12u1_amd64.deb
 dpkg -i libclang1-16_16.0.6-15~deb12u1_amd64.deb
 dpkg -i libclang-common-16-dev_16.0.6-15~deb12u1_all.deb
 dpkg -i libclang-16-dev_16.0.6-15~deb12u1_amd64.deb
+dpkg -i clang-16_16.0.6-15~deb12u1_amd64.deb
+
+ln -s /usr/bin/clang-16 /usr/bin/clang
+ln -s /usr/bin/clang++-16 /usr/bin/clang++

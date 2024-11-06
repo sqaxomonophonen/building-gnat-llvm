@@ -5,3 +5,4 @@ set -e
 cd /src/gnat-llvm
 ln -s gcc/gcc/ada llvm-interface/gnat_src
 patch -p1 < /gnat-llvm.patch
+make
