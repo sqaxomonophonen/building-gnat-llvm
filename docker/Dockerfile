@@ -26,6 +26,9 @@ RUN /setup-install-llvm16.sh
 COPY setup-gprbuild.sh /
 RUN /setup-gprbuild.sh
 
+COPY setup-git-commit-locks.sh /
+RUN /setup-git-commit-locks.sh
+
 COPY setup-build-gnat-llvm.sh /
 COPY gnat-llvm.patch /
 RUN /setup-build-gnat-llvm.sh
