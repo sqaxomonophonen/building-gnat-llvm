@@ -1,3 +1,8 @@
+NOTE: I'm not currently working on this. One big hurdle was to get an Ada
+runtime for web that supports tasking. The "adawebpack" project is
+interresting but doesn't seem to implement tasking. I tried looking at the
+"bb-runtimes" project, but I was unsuccesful in building it.
+
 
 Attempts to make semi-reproducible builds of gnat-llvm for FreeBSD and
 Docker/Linux.
